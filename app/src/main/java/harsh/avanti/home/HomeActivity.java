@@ -3,6 +3,7 @@ package harsh.avanti.home;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
+import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.View;
@@ -13,6 +14,7 @@ import harsh.avanti.addData.AddDataActivity;
 import harsh.avanti.base.BaseActivity;
 import harsh.avanti.customviews.SlidingTabLayout;
 import harsh.avanti.home.adapters.HomePagerAdapter;
+import harsh.avanti.studyMaterial.StudyMaterialFragment;
 
 import static harsh.avanti.AppConstants.KEY_TYPE;
 import static harsh.avanti.AppConstants.RC_ADD_DATA;
@@ -63,7 +65,9 @@ public class HomeActivity extends BaseActivity {
             case R.id.fab_add_study_material:
                 Intent intent = new Intent(this, AddDataActivity.class);
                 intent.putExtra(KEY_TYPE, mHomeVP.getCurrentItem());
-                mAdapter.getItem(mHomeVP.getCurrentItem()).startActivityForResult(intent, RC_ADD_DATA);
+                Fragment fragment = mAdapter.getItem(mHomeVP.getCurrentItem());
+                ((StudyMaterialFragment)fragment).resetSearch();
+                fragment.startActivityForResult(intent, RC_ADD_DATA);
                 break;
         }
     }

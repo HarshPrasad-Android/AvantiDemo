@@ -1,5 +1,6 @@
 package harsh.avanti.studyMaterial;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import harsh.avanti.storage.StudyMaterialModel;
@@ -19,7 +20,9 @@ public class StudyMaterialInteractor {
             public void execute(Realm realm) {
                 RealmResults<StudyMaterialModel> studyMaterialModels = realm.where(StudyMaterialModel.class)
                         .equalTo("mType", type).findAll();
-                iDataCallbacks.onDataFound(studyMaterialModels);
+                List<StudyMaterialModel> studyMaterialModelList = new ArrayList<StudyMaterialModel>();
+                studyMaterialModelList.addAll(realm.copyFromRealm(studyMaterialModels));
+                iDataCallbacks.onDataFound(studyMaterialModelList);
             }
         });
     }

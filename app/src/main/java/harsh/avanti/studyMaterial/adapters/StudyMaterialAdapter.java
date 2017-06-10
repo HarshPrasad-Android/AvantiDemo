@@ -4,8 +4,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import harsh.avanti.R;
@@ -15,12 +18,14 @@ import harsh.avanti.storage.StudyMaterialModel;
 /**
  * Created by Harsh.Prasad on 09-06-2017.
  */
-public class StudyMaterialAdapter extends RecyclerView.Adapter<StudyMaterialAdapter.StudyMaterialViewHolder> {
+public class StudyMaterialAdapter extends RecyclerView.Adapter<StudyMaterialAdapter.StudyMaterialViewHolder> implements Filterable {
     private List<StudyMaterialModel> mStudyMaterialList;
+    private List<StudyMaterialModel> mStudyMaterialCompleteList;
     private IOnItemClickListener onItemClickListener;
 
     public StudyMaterialAdapter(List<StudyMaterialModel> studyMaterialList) {
-        this.mStudyMaterialList = studyMaterialList;
+        mStudyMaterialCompleteList = studyMaterialList;
+        mStudyMaterialList = new ArrayList<>(mStudyMaterialCompleteList);
     }
 
     public void setOnItemClickListener(IOnItemClickListener onItemClickListener) {
@@ -42,7 +47,32 @@ public class StudyMaterialAdapter extends RecyclerView.Adapter<StudyMaterialAdap
         return mStudyMaterialList.size();
     }
 
-    public static class StudyMaterialViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence charSequence) {
+                List<StudyMaterialModel> filteredResults = new ArrayList<>();
+                for (StudyMaterialModel model : mStudyMaterialCompleteList) {
+                    if (model.getStudyMaterial().toUpperCase().contains(charSequence.toString().toUpperCase())) {
+                        filteredResults.add(model);
+                    }
+                }
+                FilterResults results = new FilterResults();
+                results.values = filteredResults;
+                results.count = filteredResults.size();
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence charSequence, FilterResults filterResults) {
+                mStudyMaterialList = (List<StudyMaterialModel>) filterResults.values;
+                notifyDataSetChanged();
+            }
+        };
+    }
+
+    public static class StudyMaterialViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private IOnItemClickListener onItemClickListener;
         public TextView mStudyMaterialTV;
 
@@ -55,7 +85,7 @@ public class StudyMaterialAdapter extends RecyclerView.Adapter<StudyMaterialAdap
 
         @Override
         public void onClick(View v) {
-            if (onItemClickListener != null){
+            if (onItemClickListener != null) {
                 onItemClickListener.onItemClick(getAdapterPosition());
             }
         }

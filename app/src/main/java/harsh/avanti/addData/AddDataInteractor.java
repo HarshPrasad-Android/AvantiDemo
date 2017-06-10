@@ -14,9 +14,10 @@ public class AddDataInteractor {
         realm.executeTransaction(new Realm.Transaction() {
             @Override
             public void execute(Realm realm) {
-                StudyMaterialModel model = new StudyMaterialModel(getKey(), type, studyMaterial);
-                StudyMaterialModel studyMaterialModel = realm.copyToRealm(model);
-                iDataCallbacks.onDataSaved(studyMaterialModel);
+                long id = getKey();
+                StudyMaterialModel model = new StudyMaterialModel(id, type, studyMaterial);
+                realm.copyToRealm(model);
+                iDataCallbacks.onDataSaved(new StudyMaterialModel(id, type, studyMaterial));
             }
         });
     }
@@ -27,8 +28,8 @@ public class AddDataInteractor {
             @Override
             public void execute(Realm realm) {
                 StudyMaterialModel model = new StudyMaterialModel(id, type, studyMaterial);
-                StudyMaterialModel studyMaterialModel = realm.copyToRealmOrUpdate(model);
-                iDataCallbacks.onDataSaved(studyMaterialModel);
+                realm.copyToRealmOrUpdate(model);
+                iDataCallbacks.onDataSaved(new StudyMaterialModel(id, type, studyMaterial));
             }
         });
     }
