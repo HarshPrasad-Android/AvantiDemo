@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Avanti</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="data">Please enter text.</string>
+    <string name="submit">Submit</string>
+    <string name="err_study_material_empty">Study material cannot be empty</string>
+</resources>
